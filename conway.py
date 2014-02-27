@@ -6,7 +6,9 @@ import matplotlib.pyplot as plt
 plt.ion()
 
 def fft_convolve2d(x,y):
-    """ 2D convolution, using FFT"""
+    """
+    2D convolution, using FFT
+    """
     fr = fft2(x)
     fr2 = fft2(np.flipud(np.fliplr(y)))
     m,n = fr.shape
@@ -16,12 +18,20 @@ def fft_convolve2d(x,y):
     return cc
 
 def step(state, k):
+    """
+    Iterates one step using the rules for CGOL.
+    """
+    # computes sums around each pixel
     b = fft_convolve2d(state,k).round()
+
+    # checks the values, and sets alive vs. dead state
     b[np.where(b < 2)] = 0
     b[np.where(b > 3)] = 0
     b[np.where((b == 2) & (state == 1))] = 1
     b[np.where(b == 3)] = 1
     b[np.where(b == 2)] = 0
+
+    # return new state
     return b
 
 if __name__ == "__main__":
