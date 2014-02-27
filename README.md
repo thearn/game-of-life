@@ -28,4 +28,4 @@ from scipy import fftpack
 fftpack.dct(data, norm='ortho')
 ```
 
-but I haven't tried that yet for this. You'd have to define a `dct2()` method using `fftpack.dct` and separability. 
+but I haven't tried that yet for this. You'd have to define a `dct2()` method using `fftpack.dct` and separability (ie. the 1D transform matrix is rank-one, and the 2D tranform operator is the Kronecker product of two 1D transforms ). 
