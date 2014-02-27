@@ -10,9 +10,10 @@ $ python conway.py
 ```
 End the program using a keyboard interrupt (ctrl-c).
 
-The state of the grid is stored in a 2D binary array.
-The rules of the game (basically computing the sum of all 8 elements of the 
-array surrounding each element) is implemented using fast FFT based convolution.
+The game grid is encoded as a simple `m` by `n` array (default 100x100 in the code) of zeros and ones.
+In game of life, a state transition is determined for each pixel by looking at the 8 pixel values all around it, and counting how many of them are "alive", then applying some rules based that number. Since the "alive" or "dead" states are just encoded as 1 or 0, this is equivalent to summing up the values of all 8 neighbors. 
+
+If you want to do this for all pixels in a single shot, this is equivalent to computing the [2D convolution](http://en.wikipedia.org/wiki/Convolution) between the game state array and the matrix [[1,1,1],[1,0,1],[1,1,1]]. Convolution is an operation that basically applies that matrix as a "stencil" at every position around the game grid array, and sums up the values according to the values in that stencil. And convolution can be very efficiently computed using the FFT, thanks to the [Fourier Convolution Theorem](http://en.wikipedia.org/wiki/Convolution_theorem).
 
 One side effect: the convolution using FFT implicitly involves periodic 
 boundary conditions, so the game grid is "wrapped" around itself (like in Pacman, or Mario Bros. 2).
