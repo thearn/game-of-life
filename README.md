@@ -1,3 +1,5 @@
+![Alt text](http://i.imgur.com/6B84SNI.png "Screenshot")
+
 Python implementation of Conway's game of life.
 
 Requires Python 2.7 (will check Python 3 soon), with Numpy and Matplotlib.
@@ -8,7 +10,7 @@ $ python conway.py
 ```
 End the program using a keyboard interrupt (ctrl-c).
 
-The state of the grid is stored in a binary array.
+The state of the grid is stored in a 2D binary array.
 The rules of the game (basically computing the sum of all 8 elements of the 
 array surrounding each element) is implemented using fast FFT based convolution.
 
