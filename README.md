@@ -19,3 +19,12 @@ boundary conditions, so the game grid is "wrapped" around itself (like in Pacman
 If you wanted to change this, you would just have to modify the 2d convolution
 method to use an orthogonal form of the DCT instead of the FFT. This would 
 correspond to "hard" (i.e. Dirichlet) boundary conditions for the operator.
+
+I think you could do this with scipy:
+
+```python
+from scipy import fftpack
+fftpack.dct(data, norm='ortho')
+```
+
+but I haven't tried that yet for this.
