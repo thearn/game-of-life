@@ -1,4 +1,4 @@
-from numpy.fft import fft, ifft, fft2, ifft2, fftshift
+from numpy.fft import fft2, ifft2, fftshift
 import numpy as np
 import time
  
