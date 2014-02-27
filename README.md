@@ -1,6 +1,6 @@
 ![Alt text](http://i.imgur.com/6B84SNI.png "Screenshot")
 
-Python implementation of Conway's game of life.
+Fast Python implementation of Conway's game of life.
 
 Requires Python 2.7 (will check Python 3 soon), with Numpy and Matplotlib.
 
