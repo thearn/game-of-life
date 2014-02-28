@@ -4,6 +4,9 @@
 
 language: c
 
+notifications:
+  email: false
+
 install:
     - sudo apt-get update  # needed for python3-numpy
     - sudo apt-get install python-dev
