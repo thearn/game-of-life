@@ -4,12 +4,11 @@ from lib import fft_convolve2d
 import matplotlib.pyplot as plt
 plt.ion()
 
-def day_and_night(state, k=None):
+def high_life(state, k=None):
     """
-    'Day & night' automata state transition
-    http://www.conwaylife.com/wiki/Day_%26_Night
+    'HighLife' automata state transition
+    http://www.conwaylife.com/wiki/HighLife
     """
-    # set up kernel if not given
     if k == None:
         m, n = state.shape
         k = np.zeros((m, n))
@@ -19,33 +18,37 @@ def day_and_night(state, k=None):
     b = fft_convolve2d(state,k).round()
     c = np.zeros(b.shape)
 
+    c[np.where((b == 2) & (state == 1))] = 1
     c[np.where((b == 3) & (state == 1))] = 1
-    c[np.where((b == 6) & (state == 1))] = 1
-    c[np.where((b == 7) & (state == 1))] = 1
-    c[np.where((b == 8) & (state == 1))] = 1
 
     c[np.where((b == 3) & (state == 0))] = 1
-    c[np.where((b == 4) & (state == 0))] = 1
     c[np.where((b == 6) & (state == 0))] = 1
-    c[np.where((b == 7) & (state == 0))] = 1
-    c[np.where((b == 8) & (state == 0))] = 1
 
     # return new state
     return c
 
 if __name__ == "__main__":
-    # set up board
+    # set up board randomly
     m,n = 100,100
     A = np.zeros((m,n))
     A = 0.63*np.random.random(m*n).reshape((m, n))
     A = A.round()
+
+    # start up an isolated replicator pattern in the upper left
+    A[:75, :75] = 0
+    A[10,11] = 1
+    A[10,12] = 1
+    A[10,13] = 1
+    A[11,10] = 1
+    A[12,10] = 1
+    A[13,10] = 1
 
     # plot each frame
     plt.figure()
     img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
     plt.show()
     while True:
-        A = day_and_night(A)
+        A = high_life(A)
         img_plot.set_data(A)
         plt.draw()
         time.sleep(0.01)

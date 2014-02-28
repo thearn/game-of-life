@@ -17,33 +17,27 @@ def conway(state, k=None):
 
     # computes sums around each pixel
     b = fft_convolve2d(state,k).round()
+    c = np.zeros(b.shape)
 
-    # checks the values, and sets alive vs. dead state
-    b[np.where(b < 2)] = 0
-    b[np.where(b > 3)] = 0
-    b[np.where((b == 2) & (state == 1))] = 1
-    b[np.where(b == 3)] = 1
+    c[np.where((b == 2) & (state == 1))] = 1
+    c[np.where((b == 3) & (state == 1))] = 1
 
-    b[np.where(b > 1)] = 0
+    c[np.where((b == 3) & (state == 0))] = 1
 
     # return new state
-    return b
+    return c
 
 if __name__ == "__main__":
     # set up board
     m,n = 100,100
     A = np.random.random(m*n).reshape((m, n)).round()
 
-    # construct convolution kernel (most efficient to do this once)
-    k = np.zeros((m, n))
-    k[m/2-1 : m/2+2, n/2-1 : n/2+2] = np.array([[1,1,1],[1,0,1],[1,1,1]])
-
     # plot each frame
     plt.figure()
     img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
     plt.show()
     while True:
-        A = conway(A, k)
+        A = conway(A)
         img_plot.set_data(A)
         plt.draw()
         time.sleep(0.01)

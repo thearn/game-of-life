@@ -5,9 +5,10 @@ import matplotlib.pyplot as plt
 plt.ion()
 
 
-def seed(state, k):
+def seeds(state, k):
     """
-    'Seed' cellular automaton state transition
+    'Seeds' cellular automaton state transition
+    http://www.conwaylife.com/wiki/Seeds
     """
     b = fft_convolve2d(state,k).round()
     c = np.zeros(b.shape)
@@ -19,10 +20,13 @@ def seed(state, k):
 
 if __name__ == "__main__":
     # set up board
-    m,n = 100,100
+    m,n = 100,200
     A = np.zeros((m,n))
     A[20,20] = 1
     A[20,21] = 1
+
+    A[75,30] = 1
+    A[76,30] = 1
 
     # construct convolution kernel
     k = np.zeros((m, n))
@@ -33,7 +37,7 @@ if __name__ == "__main__":
     img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
     plt.show()
     while True:
-        A = seed(A, k)
+        A = seeds(A, k)
         img_plot.set_data(A)
         plt.draw()
         time.sleep(0.02)
