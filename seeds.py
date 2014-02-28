@@ -13,14 +13,14 @@ def seeds(state, k):
     b = fft_convolve2d(state,k).round()
     c = np.zeros(b.shape)
     # checks the values, and sets alive vs. dead state
-    c[np.where(b == 2)] = 1
+    c[np.where((b == 2) & (state == 0))] = 1
 
     # return new state
     return c
 
 if __name__ == "__main__":
     # set up board
-    m,n = 100,200
+    m,n = 100,150
     A = np.zeros((m,n))
     A[20,20] = 1
     A[20,21] = 1
@@ -40,4 +40,4 @@ if __name__ == "__main__":
         A = seeds(A, k)
         img_plot.set_data(A)
         plt.draw()
-        time.sleep(0.02)
+        time.sleep(0.01)
