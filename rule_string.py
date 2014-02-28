@@ -12,8 +12,8 @@ m,n = 100,100
 # automata
 
 # Game of Life
-rule_string = 'B36/S23'
-A = np.random.random(m*n).reshape((m, n)).round()
+# rule_string = 'B36/S23'
+# A = np.random.random(m*n).reshape((m, n)).round()
 
 # # Replicator
 # rule_string = 'B1357/S1357'
@@ -44,6 +44,10 @@ A = np.random.random(m*n).reshape((m, n)).round()
 # A = 0.63*np.random.random(m*n).reshape((m, n))
 # A = A.round()
 
+# maze
+# rule_string = 'B3/S12345'
+# A = 0.63*np.random.random(m*n).reshape((m, n))
+# A = A.round()
 
 plt.figure()
 img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
