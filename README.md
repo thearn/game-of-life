@@ -47,3 +47,8 @@ fftpack.dct(data, norm='ortho')
 ```
 
 but I haven't tried that yet. You'd have to define a `dct2()` method using `fftpack.dct` and separability (ie. the 1D transform matrix is rank-one, and the 2D transform operator is the Kronecker product of two 1D transforms ).
+
+Goals
+======
+
+Ultimately, I'd like to study automata patterns with rule sets that depend on information beyond only the immediate 8 neighbors to a cell. For this code, this basically comes down to finding interesting behavior that results from using different convolution kernels.
