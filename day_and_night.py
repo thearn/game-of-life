@@ -4,20 +4,24 @@ from lib import fft_convolve2d
 import matplotlib.pyplot as plt
 plt.ion()
 
-def two_by_two(state, k):
+def day_and_night(state, k):
     """
-    '2x2' automata state transition
+    'day & night' automata state transition
     """
     # computes sums around each pixel
     b = fft_convolve2d(state,k).round()
     c = np.zeros(b.shape)
-    # checks the values, and sets alive vs. dead state
 
-    c[np.where((b == 1) & (state == 1))] = 1
-    c[np.where((b == 2) & (state == 1))] = 1
-    c[np.where((b == 5) & (state == 1))] = 1
+    c[np.where((b == 3) & (state == 1))] = 1
+    c[np.where((b == 6) & (state == 1))] = 1
+    c[np.where((b == 7) & (state == 1))] = 1
+    c[np.where((b == 8) & (state == 1))] = 1
+
     c[np.where((b == 3) & (state == 0))] = 1
+    c[np.where((b == 4) & (state == 0))] = 1
     c[np.where((b == 6) & (state == 0))] = 1
+    c[np.where((b == 7) & (state == 0))] = 1
+    c[np.where((b == 8) & (state == 0))] = 1
 
     # return new state
     return c
@@ -26,7 +30,8 @@ if __name__ == "__main__":
     # set up board
     m,n = 100,100
     A = np.zeros((m,n))
-    A = np.random.random(m*n).reshape((m, n)).round()
+    A = 0.63*np.random.random(m*n).reshape((m, n))
+    A = A.round()
 
     # construct convolution kernel
     k = np.zeros((m, n))
@@ -37,7 +42,7 @@ if __name__ == "__main__":
     img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
     plt.show()
     while True:
-        A = two_by_two(A, k)
+        A = day_and_night(A, k)
         img_plot.set_data(A)
         plt.draw()
         time.sleep(0.01)
