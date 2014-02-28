@@ -1,7 +1,9 @@
 ![Alt text](http://i.imgur.com/6B84SNI.png "Screenshot")
 
-Fast Python implementation of Conway's game of life [and other cellular automata](http://www.conwaylife.com/wiki/Cellular_automaton#Well-known_Life-like_cellular_automata).
+### Fast Python implementation of Conway's game of life [and other cellular automata](http://www.conwaylife.com/wiki/Cellular_automaton#Well-known_Life-like_cellular_automata)
 
+Running
+=========
 Requires Python 2.7+ or Python 3+ with Numpy and Matplotlib.
 
 To run [Game of Life](http://www.conwaylife.com/wiki/Conway%27s_Game_of_Life):
@@ -14,9 +16,12 @@ To run [Replicator](http://www.conwaylife.com/wiki/Replicator_(CA)):
 $ python replicator.py
 ```
 
-Other cellular automata implementations are run the same way.
+Other cellular automata implementations in the top-level directory are run the same way.
 
 End each program using a keyboard interrupt (ctrl-c).
+
+How it's written
+==================
 
 The game grid is encoded as a simple `m` by `n` array (default 100x100 in the code) of zeros and ones.
 In each program, a state transition is determined for each pixel by looking at the 8 pixel values all around it, and counting how many of them are "alive", then applying some rules based that number. Since the "alive" or "dead" states are just encoded as 1 or 0, this is equivalent to summing up the values of all 8 neighbors.
