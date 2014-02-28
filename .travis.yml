@@ -17,8 +17,7 @@ install:
     - sudo pip install Pillow
     - if [[ $PYVER == '2.7' ]]; then sudo apt-get install $PYTHON-matplotlib; fi
     - if [[ $PYVER == '3.2' ]]; then sudo pip-$PYVER install git+git://github.com/matplotlib/matplotlib.git@v1.2.x; fi
-    - $PYTHON setup.py build
-    - sudo $PYTHON setup.py install
+
 script:
     # Change into an innocuous directory and find tests from installation
     - mkdir $HOME/.matplotlib
