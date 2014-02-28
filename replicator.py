@@ -32,7 +32,7 @@ if __name__ == "__main__":
     plt.figure()
     img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
     plt.show()
-    for i in xrange(1,5000):
+    while True
         A = replicator(A, k)
         img_plot.set_data(A)
         plt.draw()

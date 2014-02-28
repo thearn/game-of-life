@@ -4,27 +4,28 @@ from lib import fft_convolve2d
 import matplotlib.pyplot as plt
 plt.ion()
 
-def conway(state, k):
+def two_by_two(state, k):
     """
-    Conway's game of life state transition
+    '2x2' automata state transition
     """
     # computes sums around each pixel
     b = fft_convolve2d(state,k).round()
-
+    c = np.zeros(b.shape)
     # checks the values, and sets alive vs. dead state
-    b[np.where(b < 2)] = 0
-    b[np.where(b > 3)] = 0
-    b[np.where((b == 2) & (state == 1))] = 1
-    b[np.where(b == 3)] = 1
 
-    b[np.where(b > 1)] = 0
+    c[np.where((b == 1) & (state == 1))] = 1
+    c[np.where((b == 2) & (state == 1))] = 1
+    c[np.where((b == 5) & (state == 1))] = 1
+    c[np.where((b == 3) & (state == 0))] = 1
+    c[np.where((b == 6) & (state == 0))] = 1
 
     # return new state
-    return b
+    return c
 
 if __name__ == "__main__":
     # set up board
     m,n = 100,100
+    A = np.zeros((m,n))
     A = np.random.random(m*n).reshape((m, n)).round()
 
     # construct convolution kernel
@@ -36,7 +37,7 @@ if __name__ == "__main__":
     img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
     plt.show()
     while True:
-        A = conway(A, k)
+        A = two_by_two(A, k)
         img_plot.set_data(A)
         plt.draw()
-        time.sleep(0.01)
+        time.sleep(0.1)

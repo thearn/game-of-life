@@ -1,1 +1,1 @@
-from lib import fft_convolve2d
+from .lib import fft_convolve2d

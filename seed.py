@@ -12,7 +12,7 @@ def seed(state, k):
     b = fft_convolve2d(state,k).round()
     c = np.zeros(b.shape)
     # checks the values, and sets alive vs. dead state
-    c[np.where(b==2)] = 1
+    c[np.where(b == 2)] = 1
 
     # return new state
     return c
@@ -32,8 +32,8 @@ if __name__ == "__main__":
     plt.figure()
     img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
     plt.show()
-    for i in xrange(1,5000):
+    while True:
         A = seed(A, k)
         img_plot.set_data(A)
         plt.draw()
-        time.sleep(0.05)
+        time.sleep(0.02)
