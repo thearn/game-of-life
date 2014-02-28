@@ -4,17 +4,35 @@ plt.ion()
 import numpy as np
 import time
 
+m,n = 100,100
+
 # Game of Life
 rule_string = 'B36/S23'
+A = np.random.random(m*n).reshape((m, n)).round()
+
+# # Replicator
+# rule_string = 'B1357/S1357'
+# A = np.zeros((m,n))
+# A[20,20] = 1
+# A[20,21] = 1
 
 # Day & Night
-rule_string = 'B3678/S34678'
+# rule_string = 'B3678/S34678'
+# A = 0.69*np.random.random(m*n).reshape((m, n))
+# A = A.round()
 
-# set up board randomly
-m,n = 100,100
-A = np.zeros((m,n))
-A = 0.63*np.random.random(m*n).reshape((m, n))
-A = A.round()
+# HighLife
+# rule_string = 'B36/S23'
+# A = 0.63*np.random.random(m*n).reshape((m, n))
+# A = A.round()
+
+# Seeds
+# rule_string = 'B2/S'
+# A = np.zeros((m,n))
+# A[20,20] = 1
+# A[20,21] = 1
+# A[75,30] = 1
+# A[76,30] = 1
 
 plt.figure()
 img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
