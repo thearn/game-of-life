@@ -39,6 +39,12 @@ A = np.random.random(m*n).reshape((m, n)).round()
 # A[75,30] = 1
 # A[76,30] = 1
 
+# walled cities
+# rule_string = 'B45678/S2345'
+# A = 0.63*np.random.random(m*n).reshape((m, n))
+# A = A.round()
+
+
 plt.figure()
 img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
 plt.show()
