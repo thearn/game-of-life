@@ -7,7 +7,7 @@ plt.ion()
 
 def replicator(state, k):
     """
-    'Replicator' cellular automaton iteration
+    'Replicator' cellular automaton state transition
     """
     b = fft_convolve2d(state,k).round()
     c = np.zeros(b.shape)

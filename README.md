@@ -1,6 +1,6 @@
 ![Alt text](http://i.imgur.com/6B84SNI.png "Screenshot")
 
-Fast Python implementation of Conway's game of life and other cellular automata.
+Fast Python implementation of Conway's game of life [and other cellular automata](http://www.conwaylife.com/wiki/Cellular_automaton#Well-known_Life-like_cellular_automata).
 
 Requires Python 2.7 (will check Python 3 soon), with Numpy and Matplotlib.
 
@@ -13,6 +13,8 @@ To run [Replicator](http://www.conwaylife.com/wiki/Replicator_(CA)):
 ```bash
 $ python replicator.py
 ```
+
+Other cellular automata implementations are run the same way.
 
 End each program using a keyboard interrupt (ctrl-c).
 

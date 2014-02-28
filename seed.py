@@ -4,28 +4,25 @@ from lib import fft_convolve2d
 import matplotlib.pyplot as plt
 plt.ion()
 
-def conway(state, k):
+
+def seed(state, k):
     """
-    Conway's game of life state transition
+    'Seed' cellular automaton state transition
     """
-    # computes sums around each pixel
     b = fft_convolve2d(state,k).round()
-
+    c = np.zeros(b.shape)
     # checks the values, and sets alive vs. dead state
-    b[np.where(b < 2)] = 0
-    b[np.where(b > 3)] = 0
-    b[np.where((b == 2) & (state == 1))] = 1
-    b[np.where(b == 3)] = 1
-
-    b[np.where(b > 1)] = 0
+    c[np.where(b==2)] = 1
 
     # return new state
-    return b
+    return c
 
 if __name__ == "__main__":
     # set up board
     m,n = 100,100
-    A = np.random.random(m*n).reshape((m, n)).round()
+    A = np.zeros((m,n))
+    A[20,20] = 1
+    A[20,21] = 1
 
     # construct convolution kernel
     k = np.zeros((m, n))
@@ -36,7 +33,7 @@ if __name__ == "__main__":
     img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
     plt.show()
     for i in xrange(1,5000):
-        A = conway(A, k)
+        A = seed(A, k)
         img_plot.set_data(A)
         plt.draw()
-        time.sleep(0.01)
+        time.sleep(0.05)
