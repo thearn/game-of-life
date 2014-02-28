@@ -19,6 +19,10 @@ $ python replicator.py
 
 Other cellular automata implementations in the top-level directory are run the same way.
 
+Alternatively, a general-purpose neighbor-oriented automata state transition function is also available. This will take an array encoding the current state (see below) along with a [rule string](http://www.conwaylife.com/wiki/Cellular_automaton#Rules), and outputs
+the next state for all cells. `rule_string.py`
+shows how to use this.
+
 End each program using a keyboard interrupt (ctrl-c).
 
 How it's written

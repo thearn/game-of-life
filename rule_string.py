@@ -4,7 +4,12 @@ plt.ion()
 import numpy as np
 import time
 
+# game board size
 m,n = 100,100
+
+# uncomment any of the rule string and
+# initial state arrays (A) below to see each
+# automata
 
 # Game of Life
 rule_string = 'B36/S23'
