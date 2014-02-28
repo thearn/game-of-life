@@ -21,11 +21,11 @@ If you wanted to change this, you would just have to modify the 2D convolution
 function to use an orthogonal form of the DCT instead of the FFT. This would 
 correspond to "hard" (i.e. Dirichlet) boundary conditions on the convolution operator.
 
-I think you could do this with scipy:
+I think you could do this with scipy using the 1D orthogonal dct provided:
 
 ```python
 from scipy import fftpack
 fftpack.dct(data, norm='ortho')
 ```
 
-but I haven't tried that yet for this. You'd have to define a `dct2()` method using `fftpack.dct` and separability (ie. the 1D transform matrix is rank-one, and the 2D transform operator is the Kronecker product of two 1D transforms ). 
+but I haven't tried that yet. You'd have to define a `dct2()` method using `fftpack.dct` and separability (ie. the 1D transform matrix is rank-one, and the 2D transform operator is the Kronecker product of two 1D transforms ). 
