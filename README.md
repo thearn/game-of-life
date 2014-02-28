@@ -2,7 +2,7 @@
 
 Fast Python implementation of Conway's game of life [and other cellular automata](http://www.conwaylife.com/wiki/Cellular_automaton#Well-known_Life-like_cellular_automata).
 
-Requires Python 2.7 (will check Python 3 soon), with Numpy and Matplotlib.
+Requires Python 2.7+ or Python 3+ with Numpy and Matplotlib.
 
 To run [Game of Life](http://www.conwaylife.com/wiki/Conway%27s_Game_of_Life):
 ```bash
