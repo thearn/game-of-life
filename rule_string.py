@@ -45,9 +45,9 @@ m,n = 100,100
 # A = A.round()
 
 # maze
-# rule_string = 'B3/S12345'
-# A = 0.63*np.random.random(m*n).reshape((m, n))
-# A = A.round()
+rule_string = 'B3/S12345'
+A = 0.63*np.random.random(m*n).reshape((m, n))
+A = A.round()
 
 plt.figure()
 img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
