@@ -20,7 +20,7 @@ def seeds(state, k):
 
 if __name__ == "__main__":
     # set up board
-    m,n = 100,150
+    m,n = 100,200
     A = np.zeros((m,n))
     A[20,20] = 1
     A[20,21] = 1

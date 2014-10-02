@@ -43,7 +43,7 @@ if __name__ == "__main__":
     # plot each frame
     plt.figure()
     img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
-    plt.show()
+    plt.show(block=False)
     while True:
         A = day_and_night(A)
         img_plot.set_data(A)
