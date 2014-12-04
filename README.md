@@ -3,9 +3,13 @@
 [![Build Status](https://travis-ci.org/thearn/game-of-life.png?branch=master)](https://travis-ci.org/thearn/game-of-life)
 ### Fast Python implementation of Conway's game of life [and other cellular automata](http://www.conwaylife.com/wiki/Cellular_automaton#Well-known_Life-like_cellular_automata)
 
-Running
-=========
-Requires Python 2.7+ or Python 3+ with Numpy and Matplotlib.
+## Requirement
+
+1. Requires Python 2.7+ or Python 3+ 
+2. Numpy 
+3. Matplotlib.
+
+## How to Start
 
 To run [Game of Life](http://www.conwaylife.com/wiki/Conway%27s_Game_of_Life):
 ```bash
@@ -25,8 +29,7 @@ shows how to use this.
 
 End each program using a keyboard interrupt (ctrl-c).
 
-How it's written
-==================
+## How it's written
 
 The game grid is encoded as a simple `m` by `n` array (default 100x100 in the code) of zeros and ones.
 In each program, a state transition is determined for each pixel by looking at the 8 pixel values all around it, and counting how many of them are "alive", then applying some rules based that number. Since the "alive" or "dead" states are just encoded as 1 or 0, this is equivalent to summing up the values of all 8 neighbors.
@@ -48,7 +51,6 @@ fftpack.dct(data, norm='ortho')
 
 but I haven't tried that yet. You'd have to define a `dct2()` method using `fftpack.dct` and separability (ie. the 1D transform matrix is rank-one, and the 2D transform operator is the Kronecker product of two 1D transforms ).
 
-Goals
-======
+## Goals
 
 Ultimately, I'd like to study automata patterns with rule sets that depend on information beyond only the immediate 8 neighbors to a cell. For this code, this basically comes down to finding interesting behavior that results from using different convolution kernels.
