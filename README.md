@@ -9,7 +9,7 @@
 2. Numpy 
 3. Matplotlib.
 
-## How to Run	
+# How to Run	
 
 To run [Game of Life](http://www.conwaylife.com/wiki/Conway%27s_Game_of_Life):
 ```bash
