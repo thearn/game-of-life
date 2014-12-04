@@ -9,7 +9,7 @@
 2. Numpy 
 3. Matplotlib.
 
-## How to Start
+## How to Run	
 
 To run [Game of Life](http://www.conwaylife.com/wiki/Conway%27s_Game_of_Life):
 ```bash
@@ -29,7 +29,7 @@ shows how to use this.
 
 End each program using a keyboard interrupt (ctrl-c).
 
-## How it's written
+## How It's Written
 
 The game grid is encoded as a simple `m` by `n` array (default 100x100 in the code) of zeros and ones.
 In each program, a state transition is determined for each pixel by looking at the 8 pixel values all around it, and counting how many of them are "alive", then applying some rules based that number. Since the "alive" or "dead" states are just encoded as 1 or 0, this is equivalent to summing up the values of all 8 neighbors.
