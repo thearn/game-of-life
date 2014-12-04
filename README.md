@@ -7,7 +7,7 @@
 
 1. Requires Python 2.7+ or Python 3+ 
 2. Numpy 
-3. Matplotlib.
+3. Matplotlib
 
 ## How to Run	
 
