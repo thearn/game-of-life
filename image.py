@@ -4,7 +4,7 @@ from lib import fft_convolve2d
 import matplotlib.pyplot as plt
 plt.ion()
 
-from scipy.misc import imread
+from scipy.misc import imread, imresize
 
 
 def conway(state, k=None):
@@ -33,14 +33,20 @@ def conway(state, k=None):
 if __name__ == "__main__":
     # set up board
     m,n = 100,100
-    A = imread("NASA.png")
-    A = np.where(A > 200, 1, 0)
+    A_original = imresize(imread("test.png"), 0.5)
+
+    threshold = 180
+    A = np.where(A_original > threshold, 0, 1)
 
     R, G, B = A[:,:,0], A[:,:,1], A[:,:,2]
 
     # plot each frame
     plt.figure()
-    img_plot = plt.imshow(A, interpolation="nearest", cmap = plt.cm.gray)
+    plt.subplot(121)
+    plt.imshow(A_original,interpolation="nearest")
+
+    plt.subplot(122)
+    img_plot = plt.imshow(A,interpolation="nearest")
     plt.show(block=False)
     while True:
         R, G, B = conway(R), conway(G), conway(B)
