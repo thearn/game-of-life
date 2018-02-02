@@ -19,10 +19,7 @@ def conway(state, k=None):
     b = fft_convolve2d(state,k).round()
     c = np.zeros(b.shape)
 
-    c[np.where((b == 2) & (state == 1))] = 1
-    c[np.where((b == 3) & (state == 1))] = 1
-
-    c[np.where((b == 3) & (state == 0))] = 1
+    c[((b == 2) & (state == 1)) | (b == 3)] = 1
 
     # return new state
     return c
