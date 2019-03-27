@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     # construct convolution kernel
     k = np.zeros((m, n))
-    k[m/2-1 : m/2+2, n/2-1 : n/2+2] = np.array([[1,1,1],[1,0,1],[1,1,1]])
+    k[m//2-1 : m//2+2, n//2-1 : n//2+2] = np.array([[1,1,1],[1,0,1],[1,1,1]])
 
     # plot each frame
     plt.figure()
