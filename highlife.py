@@ -51,4 +51,4 @@ if __name__ == "__main__":
         A = high_life(A)
         img_plot.set_data(A)
         plt.draw()
-        time.sleep(0.01)
+        plt.pause(0.01)

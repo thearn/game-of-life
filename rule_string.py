@@ -57,4 +57,4 @@ while True:
     A = automata(A, rule_string)
     img_plot.set_data(A)
     plt.draw()
-    time.sleep(0.01)
+    plt.pause(0.01)

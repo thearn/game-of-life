@@ -53,4 +53,5 @@ if __name__ == "__main__":
         A[:,:,0], A[:,:,1], A[:,:,2] = R,G,B
         img_plot.set_data(A)
         plt.draw()
-        time.sleep(0.01)
+        plt.pause(0.01)
+
