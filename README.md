@@ -3,10 +3,6 @@
 [![Build Status](https://travis-ci.org/thearn/game-of-life.png?branch=master)](https://travis-ci.org/thearn/game-of-life)
 ### Fast Python implementation of Conway's game of life [and other cellular automata](http://www.conwaylife.com/wiki/Cellular_automaton#Well-known_Life-like_cellular_automata)
 
-Background
-============
-A full write up on this implementation is given [here](http://tristanhearn.com/gameoflife).
-
 Running
 =========
 Requires Python 2.7+ or Python 3+ with Numpy and Matplotlib.
