@@ -9,7 +9,7 @@ def automata(state, rule = 'B3/S23', k=None):
     if k == None:
         m, n = state.shape
         k = np.zeros((m, n))
-        k[m/2-1 : m/2+2, n/2-1 : n/2+2] = np.array([[1,1,1],[1,0,1],[1,1,1]])
+        k[m//2-1 : m//2+2, n//2-1 : n//2+2] = np.array([[1,1,1],[1,0,1],[1,1,1]])
 
     # computes sums around each pixel
     b = fft_convolve2d(state,k).round()
