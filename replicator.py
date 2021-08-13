@@ -38,4 +38,4 @@ if __name__ == "__main__":
         A = replicator(A)
         img_plot.set_data(A)
         plt.draw()
-        time.sleep(0.05)
+        plt.pause(0.05)

@@ -40,4 +40,5 @@ if __name__ == "__main__":
         A = seeds(A, k)
         img_plot.set_data(A)
         plt.draw()
-        time.sleep(0.01)
+        plt.pause(0.01)
+
