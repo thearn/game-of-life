@@ -4,7 +4,7 @@
 
 Running
 =========
-Requires Python 2.7+ or Python 3+ with Numpy and Matplotlib.
+Run `pip install -r requirements`
 
 To run [Game of Life](http://www.conwaylife.com/wiki/Conway%27s_Game_of_Life):
 ```bash
