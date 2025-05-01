@@ -1,13 +1,14 @@
 import gradio as gr
 import numpy as np
 import time
-from lib.custom import automata
+from lib.custom import automata # Updated import path if needed, uses scipy now
 from PIL import Image # Import Pillow
 
 # --- Simulation Parameters ---
 DEFAULT_BOARD_SIZE = 100 # Default edge size for the square board
 DISPLAY_SIZE = (400, 400) # Target size for display
 INITIAL_FILL_FACTOR = 0.3 # Percentage of initially alive cells
+DEFAULT_BOUNDARY = 'wrap' # Default boundary condition
 
 # --- Predefined Rulesets ---
 PREDEFINED_RULESETS = {
@@ -58,14 +59,15 @@ def get_initial_display_board(board):
 # --- Gradio Interface ---
 with gr.Blocks() as demo:
     # State variables
-    board_size_state = gr.State((DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE)) # Stores the desired board dimensions
+    board_size_state = gr.State((DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE))
     initial_raw_board = initialize_board(size_tuple=board_size_state.value)
-    board_state = gr.State(initial_raw_board) # Stores the current raw simulation board
+    board_state = gr.State(initial_raw_board)
     running = gr.State(False)
-    ruleset = gr.State(DEFAULT_RULESET_STRING)
+    ruleset = gr.State(DEFAULT_RULESET_STRING) # State for ruleset string
+    boundary_condition = gr.State(DEFAULT_BOUNDARY) # State for boundary condition
 
     gr.Markdown("# Cellular Automata Explorer")
-    gr.Markdown("Select/enter ruleset, set board size (press Enter), then Start/Pause/Restart.")
+    gr.Markdown("Select/enter ruleset, set board size (press Enter), choose boundary, then Start/Pause/Restart.")
 
     with gr.Row():
         ruleset_dropdown = gr.Dropdown(
@@ -78,6 +80,7 @@ with gr.Blocks() as demo:
             label="Ruleset String (e.g., B3/S23)",
             interactive=True
         )
+    with gr.Row():
         board_size_input = gr.Number(
             value=DEFAULT_BOARD_SIZE,
             label="Board Size (N x N)",
@@ -85,6 +88,11 @@ with gr.Blocks() as demo:
             maximum=500,
             step=10,
             interactive=True
+        )
+        boundary_radio = gr.Radio(
+            choices=[("Periodic (wrap)", "wrap"), ("Zero-Padding (fill)", "fill")],
+            value=DEFAULT_BOUNDARY,
+            label="Boundary Condition"
         )
 
     with gr.Row():
@@ -104,16 +112,20 @@ with gr.Blocks() as demo:
 
     # --- Event Handlers ---
     def update_ruleset_string(dropdown_choice):
+        """Updates ruleset state and textbox"""
         new_ruleset = PREDEFINED_RULESETS.get(dropdown_choice, "")
-        ruleset.value = new_ruleset
-        return new_ruleset
+        ruleset.value = new_ruleset # Update state
+        print(f"Ruleset state updated by dropdown to: {new_ruleset}")
+        return new_ruleset # Update textbox
 
     def handle_custom_ruleset_input(custom_input):
-        ruleset.value = custom_input
+        """Updates ruleset state"""
+        ruleset.value = custom_input # Update state
+        print(f"Ruleset state updated by textbox to: {custom_input}")
 
-    def simulation_loop(current_raw_board, current_ruleset):
+    def simulation_loop(current_raw_board, current_ruleset, current_boundary):
         """Generator that runs the simulation loop and yields SCALED frames."""
-        print(f"Simulation loop entered with board shape: {current_raw_board.shape}")
+        print(f"Simulation loop entered with board shape: {current_raw_board.shape}, rule: {current_ruleset}, boundary: {current_boundary}")
 
         if running.value:
              print("Simulation already running.")
@@ -131,7 +143,7 @@ with gr.Blocks() as demo:
                 time.sleep(0.1)
                 continue
             try:
-                current_board_internal = automata(current_board_internal, rule=current_ruleset)
+                current_board_internal = automata(current_board_internal, rule=current_ruleset, boundary=current_boundary)
                 new_raw_frame = (current_board_internal * 255).astype(np.uint8)
                 board_state.value = new_raw_frame
                 yield scale_board(new_raw_frame)
@@ -173,17 +185,26 @@ with gr.Blocks() as demo:
         board_size_state.value = new_size_tuple
         print(f"Desired board size state updated to: {new_size_tuple}")
 
-    # MODIFIED: Removed desired_size_tuple from arguments
-    def start_simulation_wrapper(current_raw_board, current_ruleset):
+    def handle_boundary_change(new_boundary):
+        """Updates the boundary condition state."""
+        print(f"Boundary condition changed to: {new_boundary}")
+        boundary_condition.value = new_boundary
+
+    # MODIFIED: Removed current_ruleset from arguments
+    def start_simulation_wrapper(current_raw_board):
         """Checks board size, initializes if needed, then starts simulation_loop."""
-        # MODIFIED: Get desired size directly from state inside the function
+        # MODIFIED: Get desired size, ruleset, and boundary directly from state
         desired_size_tuple = board_size_state.value
+        current_ruleset = ruleset.value
+        current_boundary = boundary_condition.value
 
         print("-" * 20)
         print(f"Start Wrapper Entered.")
-        print(f"  Desired size (read directly from state): {desired_size_tuple}") # Updated print
+        print(f"  Desired size (read from state): {desired_size_tuple}")
+        print(f"  Ruleset (read from state): {current_ruleset}") # Print ruleset
+        print(f"  Boundary Condition (read from state): {current_boundary}")
         current_shape = current_raw_board.shape if current_raw_board is not None else None
-        print(f"  Current board shape (from board_state input): {current_shape}") # Clarified source
+        print(f"  Current board shape (from board_state input): {current_shape}")
 
         board_to_start = current_raw_board
         needs_reinit = False
@@ -203,7 +224,8 @@ with gr.Blocks() as demo:
             print("  Board size matches. Starting simulation with current board.")
         print("-" * 20)
 
-        yield from simulation_loop(board_to_start, current_ruleset)
+        # MODIFIED: Pass ruleset read from state to simulation_loop
+        yield from simulation_loop(board_to_start, current_ruleset, current_boundary)
 
     # --- Component Interactions ---
     ruleset_dropdown.change(
@@ -224,10 +246,16 @@ with gr.Blocks() as demo:
         outputs=None
     )
 
-    # MODIFIED: Removed board_size_state from inputs
+    boundary_radio.change(
+        fn=handle_boundary_change,
+        inputs=boundary_radio,
+        outputs=None
+    )
+
+    # MODIFIED: Removed ruleset from inputs
     start_btn.click(
         fn=start_simulation_wrapper,
-        inputs=[board_state, ruleset], # Only pass current board and ruleset
+        inputs=[board_state], # Only pass current board state
         outputs=output_image
     )
 
