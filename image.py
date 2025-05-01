@@ -4,7 +4,7 @@ from lib import fft_convolve2d
 import matplotlib.pyplot as plt
 plt.ion()
 
-from scipy.misc import imread, imresize
+from PIL import Image
 
 
 def conway(state, k=None):
@@ -13,10 +13,10 @@ def conway(state, k=None):
     """
 
     # set up kernel if not given
-    if k == None:
+    if k is None:
         m, n = state.shape
         k = np.zeros((m, n))
-        k[m/2-1 : m/2+2, n/2-1 : n/2+2] = np.array([[1,1,1],[1,0,1],[1,1,1]])
+        k[m//2-1 : m//2+2, n//2-1 : n//2+2] = np.array([[1,1,1],[1,0,1],[1,1,1]])
 
     # computes sums around each pixel
     b = fft_convolve2d(state,k).round()
@@ -33,10 +33,17 @@ def conway(state, k=None):
 if __name__ == "__main__":
     # set up board
     m,n = 100,100
-    A_original = imresize(imread("test.png"), 0.5)
+    img = Image.open("test.png")
+    # Resize image to 50%
+    new_width = int(img.width * 0.5)
+    new_height = int(img.height * 0.5)
+    A_original = np.array(img.resize((new_width, new_height)))
 
     threshold = 180
-    A = np.where(A_original > threshold, 0, 1)
+    # Convert to binary based on threshold, handling potential alpha channel
+    if A_original.shape[2] == 4: # Check for alpha channel
+        A_original = A_original[:,:,:3] # Drop alpha channel if present
+    A = np.where(np.mean(A_original, axis=2) > threshold, 0, 1) # Use mean for grayscale conversion
 
     R, G, B = A[:,:,0], A[:,:,1], A[:,:,2]
 
@@ -53,4 +60,4 @@ if __name__ == "__main__":
         A[:,:,0], A[:,:,1], A[:,:,2] = R,G,B
         img_plot.set_data(A)
         plt.draw()
-        time.sleep(0.01)
+        plt.pause(0.01) # Use plt.pause to allow GUI updates

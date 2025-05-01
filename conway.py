@@ -10,10 +10,10 @@ def conway(state, k=None):
     """
 
     # set up kernel if not given
-    if k == None:
+    if k is None:
         m, n = state.shape
         k = np.zeros((m, n))
-        k[m/2-1 : m/2+2, n/2-1 : n/2+2] = np.array([[1,1,1],[1,0,1],[1,1,1]])
+        k[m//2-1 : m//2+2, n//2-1 : n//2+2] = np.array([[1,1,1],[1,0,1],[1,1,1]])
 
     # computes sums around each pixel
     b = fft_convolve2d(state,k).round()
@@ -40,4 +40,4 @@ if __name__ == "__main__":
         A = conway(A)
         img_plot.set_data(A)
         plt.draw()
-        time.sleep(0.01)
+        plt.pause(0.01) # Use plt.pause to allow GUI updates
