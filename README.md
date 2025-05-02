@@ -13,7 +13,21 @@ To run the main interactive application using Gradio:
 ```bash
 python app.py
 ```
-This will launch a web interface (usually at http://127.0.0.1:7860) where you can select predefined rulesets, enter custom rules, adjust the board size, and control the simulation.
+This will launch a web interface (usually at http://127.0.0.1:7860).
+
+**Gradio App Controls:**
+
+*   **Predefined Rulesets:** Select from a list of common cellular automata rules (e.g., "Conway's Game of Life", "HighLife"). Selecting a ruleset automatically updates the "Ruleset String" textbox.
+*   **Ruleset String:** Enter a custom ruleset in the standard "B/S" notation (e.g., "B3/S23"). This defines the number of neighbors required for a dead cell to become alive (Birth) and for a live cell to survive (Survival).
+*   **Board Size (N x N):** Set the dimensions of the square simulation grid. Press Enter after changing the value. Note: Changing the size while a simulation is paused will cause the board to reset upon restarting.
+*   **Boundary Condition:** Choose how the edges of the grid are handled:
+    *   *Periodic (wrap):* The grid wraps around (top connects to bottom, left connects to right).
+    *   *Zero-Padding (fill):* The grid is surrounded by dead cells.
+*   **Start:** Begins the simulation with the current settings and board state. If the simulation was paused, it resumes from the last frame using the potentially updated ruleset and boundary conditions.
+*   **Pause:** Stops the simulation, preserving the current board state.
+*   **Restart:** Stops any running simulation and generates a completely new random board based on the current size setting.
+
+You can pause a running simulation, change the ruleset or boundary conditions, and then click "Start" again to continue the simulation from the paused state but applying the new rules.
 
 To see a basic example of running a simulation directly with Matplotlib for visualization:
 ```bash
