@@ -191,21 +191,22 @@ with gr.Blocks() as demo:
         print(f"Boundary condition changed to: {new_boundary}")
         boundary_condition.value = new_boundary
 
-    # MODIFIED: Removed current_ruleset from arguments
-    def start_simulation_wrapper(current_raw_board: Optional[np.ndarray]) -> Generator[np.ndarray, None, None]:
+    # MODIFIED: Reads board_state directly, removed current_raw_board argument
+    def start_simulation_wrapper() -> Generator[np.ndarray, None, None]:
         """Checks board size, initializes if needed, then starts simulation_loop."""
-        # MODIFIED: Get desired size, ruleset, and boundary directly from state
+        # MODIFIED: Get desired size, ruleset, boundary, and board directly from state
         desired_size_tuple: Tuple[int, int] = board_size_state.value
         current_ruleset: str = ruleset.value
         current_boundary: str = boundary_condition.value
+        current_raw_board: Optional[np.ndarray] = board_state.value # Read board state here
 
         print("-" * 20)
         print(f"Start Wrapper Entered.")
         print(f"  Desired size (read from state): {desired_size_tuple}")
-        print(f"  Ruleset (read from state): {current_ruleset}") # Print ruleset
+        print(f"  Ruleset (read from state): {current_ruleset}")
         print(f"  Boundary Condition (read from state): {current_boundary}")
         current_shape = current_raw_board.shape if current_raw_board is not None else None
-        print(f"  Current board shape (from board_state input): {current_shape}")
+        print(f"  Current board shape (read from board_state): {current_shape}")
 
         board_to_start: Optional[np.ndarray] = current_raw_board
         needs_reinit: bool = False
@@ -253,10 +254,10 @@ with gr.Blocks() as demo:
         outputs=None
     )
 
-    # MODIFIED: Removed ruleset from inputs
+    # MODIFIED: Removed inputs as wrapper reads state directly
     start_btn.click(
         fn=start_simulation_wrapper,
-        inputs=[board_state], # Only pass current board state
+        inputs=None, # Wrapper reads state directly
         outputs=output_image
     )
 
