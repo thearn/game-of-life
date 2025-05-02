@@ -11,6 +11,8 @@ license: apache-2.0
 short_description: Cellular automata experiments using fft
 ---
 
+Check out the interactive demo hosted on Hugging Face Spaces: [https://huggingface.co/spaces/thearn/Game-of-life](https://huggingface.co/spaces/thearn/Game-of-life)
+
 ![Alt text](http://i.imgur.com/6B84SNI.png "Screenshot")
 
 ### Fast Python implementation of Conway's game of life [and other cellular automata](http://www.conwaylife.com/wiki/Cellular_automaton#Well-known_Life-like_cellular_automata)
