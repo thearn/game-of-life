@@ -4,25 +4,24 @@
 
 Running
 =========
-Run `pip install -r requirements`
-
-To run [Game of Life](http://www.conwaylife.com/wiki/Conway%27s_Game_of_Life):
+First, install the required dependencies:
 ```bash
-$ python conway.py
+pip install -r requirements.txt
 ```
 
-To run [Replicator](http://www.conwaylife.com/wiki/Replicator_(CA)):
+To run the main interactive application using Gradio:
 ```bash
-$ python replicator.py
+python app.py
 ```
+This will launch a web interface (usually at http://127.0.0.1:7860) where you can select predefined rulesets, enter custom rules, adjust the board size, and control the simulation.
 
-Other cellular automata implementations in the top-level directory are run the same way.
+To see a basic example of running a simulation directly with Matplotlib for visualization:
+```bash
+python example.py
+```
+You can modify `example.py` to experiment with different rules and initial states outside the Gradio app.
 
-Alternatively, a general-purpose neighbor-oriented automata state transition function is also available. This will take an array encoding the current state (see below) along with a [rule string](http://www.conwaylife.com/wiki/Cellular_automaton#Rules), and outputs
-the next state for all cells. `rule_string.py`
-shows how to use this.
-
-End each program using a keyboard interrupt (ctrl-c).
+End command-line programs like `example.py` using a keyboard interrupt (Ctrl+C). The Gradio app can be stopped by closing the terminal where it's running.
 
 How it's written
 ==================
@@ -30,22 +29,11 @@ How it's written
 The game grid is encoded as a simple `m` by `n` array (default 100x100 in the code) of zeros and ones.
 In each program, a state transition is determined for each pixel by looking at the 8 pixel values all around it, and counting how many of them are "alive", then applying some rules based that number. Since the "alive" or "dead" states are just encoded as 1 or 0, this is equivalent to summing up the values of all 8 neighbors.
 
-If you want to do this for all pixels in a single shot, this is equivalent to computing the [2D convolution](http://en.wikipedia.org/wiki/Convolution) between the game state array and the matrix [[1,1,1],[1,0,1],[1,1,1]]. Convolution is an operation that basically applies that matrix as a "stencil" at every position around the game grid array, and sums up the values according to the values in that stencil. And convolution can be very efficiently computed using the FFT, thanks to the [Fourier Convolution Theorem](http://en.wikipedia.org/wiki/Convolution_theorem).
+If you want to do this for all pixels in a single shot, this is equivalent to computing the [2D convolution](http://en.wikipedia.org/wiki/Convolution) between the game state array and a kernel matrix (e.g., [[1,1,1],[1,0,1],[1,1,1]] for counting neighbors). Convolution applies this kernel as a "stencil" across the grid to sum neighbor values. This implementation uses `scipy.signal.convolve2d` for this calculation.
 
-One side effect: the convolution using FFT implicitly involves periodic
-boundary conditions, so the game grid is "wrapped" around itself (like in Pacman, or Mario Bros. 2).
-If you wanted to change this, you would just have to modify the 2D convolution
-function to use an orthogonal form of the DCT instead of the FFT. This would
-correspond to "hard" (i.e. Dirichlet) boundary conditions on the convolution operator.
-
-I think you could do this with scipy using the 1D orthogonal dct provided:
-
-```python
-from scipy import fftpack
-fftpack.dct(data, norm='ortho')
-```
-
-but I haven't tried that yet. You'd have to define a `dct2()` method using `fftpack.dct` and separability (ie. the 1D transform matrix is rank-one, and the 2D transform operator is the Kronecker product of two 1D transforms ).
+An important aspect of convolution is how edges are handled. This application supports two common boundary conditions, which can be selected in the Gradio interface (`app.py`):
+*   **Periodic ('wrap'):** The grid wraps around itself, connecting the top edge to the bottom and the left edge to the right (like in Pac-Man).
+*   **Zero-Padding ('fill'):** The grid is assumed to be surrounded by zeros (dead cells) beyond its boundaries.
 
 Goals
 ======
