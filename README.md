@@ -1,3 +1,13 @@
+---
+title: Game of Life
+emoji: 🎮
+colorFrom: blue
+colorTo: green
+sdk: gradio
+app_file: app.py
+license: apache-2.0
+---
+
 ![Alt text](http://i.imgur.com/6B84SNI.png "Screenshot")
 
 ### Fast Python implementation of Conway's game of life [and other cellular automata](http://www.conwaylife.com/wiki/Cellular_automaton#Well-known_Life-like_cellular_automata)
