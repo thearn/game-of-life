@@ -1,14 +1,15 @@
-from lib import fft_convolve2d
+from lib.lib import fft_convolve2d # Corrected import path
 import unittest
 import numpy as np
 
 class TestFFTconvolve(unittest.TestCase):
 
-    def test_uniform(self):
+    def test_uniform(self) -> None:
 
-        A = np.random.randn(10,10)
-        K = np.ones((10,10))
-        a,b = fft_convolve2d(A,K).max(), A.sum()
+        A: np.ndarray = np.random.randn(10,10)
+        K: np.ndarray = np.ones((10,10))
+        a: float = fft_convolve2d(A,K).max()
+        b: float = A.sum()
 
         self.assertAlmostEqual(a, b)
 

@@ -3,15 +3,16 @@ import numpy as np
 import time
 from lib.custom import automata # Updated import path if needed, uses scipy now
 from PIL import Image # Import Pillow
+from typing import Tuple, Dict, Optional, Generator, Union
 
 # --- Simulation Parameters ---
 DEFAULT_BOARD_SIZE = 100 # Default edge size for the square board
-DISPLAY_SIZE = (400, 400) # Target size for display
-INITIAL_FILL_FACTOR = 0.3 # Percentage of initially alive cells
-DEFAULT_BOUNDARY = 'wrap' # Default boundary condition
+DISPLAY_SIZE: Tuple[int, int] = (400, 400) # Target size for display
+INITIAL_FILL_FACTOR: float = 0.3 # Percentage of initially alive cells
+DEFAULT_BOUNDARY: str = 'wrap' # Default boundary condition
 
 # --- Predefined Rulesets ---
-PREDEFINED_RULESETS = {
+PREDEFINED_RULESETS: Dict[str, str] = {
     "Conway's Game of Life": "B3/S23",
     "HighLife": "B36/S23",
     "Day & Night": "B3678/S34678",
@@ -22,10 +23,10 @@ PREDEFINED_RULESETS = {
     "2x2": "B36/S125",
 }
 DEFAULT_RULESET_NAME = "Conway's Game of Life"
-DEFAULT_RULESET_STRING = PREDEFINED_RULESETS[DEFAULT_RULESET_NAME]
+DEFAULT_RULESET_STRING: str = PREDEFINED_RULESETS[DEFAULT_RULESET_NAME]
 
 # --- Helper Functions ---
-def scale_board(board_array, target_size=DISPLAY_SIZE):
+def scale_board(board_array: Optional[np.ndarray], target_size: Tuple[int, int] = DISPLAY_SIZE) -> np.ndarray:
     """Scales the board array using Pillow."""
     if board_array is None or board_array.size == 0:
         return np.zeros(target_size, dtype=np.uint8)
@@ -41,7 +42,7 @@ def scale_board(board_array, target_size=DISPLAY_SIZE):
         print(f"Warning: Board array has unexpected dimensions {board_array.shape}. Returning blank.")
         return np.zeros(target_size, dtype=np.uint8)
 
-def initialize_board(size_tuple=(DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE), fill_factor=INITIAL_FILL_FACTOR):
+def initialize_board(size_tuple: Tuple[int, int] = (DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE), fill_factor: float = INITIAL_FILL_FACTOR) -> np.ndarray:
     """Creates a random initial board state with given dimensions."""
     if not (isinstance(size_tuple, tuple) and len(size_tuple) == 2 and
             isinstance(size_tuple[0], int) and isinstance(size_tuple[1], int) and
@@ -52,19 +53,19 @@ def initialize_board(size_tuple=(DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE), fill_f
     board = (np.random.rand(size_tuple[0], size_tuple[1]) < fill_factor).astype(np.uint8) * 255
     return board
 
-def get_initial_display_board(board):
+def get_initial_display_board(board: np.ndarray) -> np.ndarray:
     """Scales the initial board for display."""
     return scale_board(board)
 
 # --- Gradio Interface ---
 with gr.Blocks() as demo:
     # State variables
-    board_size_state = gr.State((DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE))
-    initial_raw_board = initialize_board(size_tuple=board_size_state.value)
-    board_state = gr.State(initial_raw_board)
-    running = gr.State(False)
-    ruleset = gr.State(DEFAULT_RULESET_STRING) # State for ruleset string
-    boundary_condition = gr.State(DEFAULT_BOUNDARY) # State for boundary condition
+    board_size_state: gr.State = gr.State((DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE))
+    initial_raw_board: np.ndarray = initialize_board(size_tuple=board_size_state.value)
+    board_state: gr.State = gr.State(initial_raw_board)
+    running: gr.State = gr.State(False)
+    ruleset: gr.State = gr.State(DEFAULT_RULESET_STRING) # State for ruleset string
+    boundary_condition: gr.State = gr.State(DEFAULT_BOUNDARY) # State for boundary condition
 
     gr.Markdown("# Cellular Automata Explorer")
     gr.Markdown("Select/enter ruleset, set board size (press Enter), choose boundary, then Start/Pause/Restart.")
@@ -111,19 +112,19 @@ with gr.Blocks() as demo:
     )
 
     # --- Event Handlers ---
-    def update_ruleset_string(dropdown_choice):
+    def update_ruleset_string(dropdown_choice: str) -> str:
         """Updates ruleset state and textbox"""
-        new_ruleset = PREDEFINED_RULESETS.get(dropdown_choice, "")
+        new_ruleset: str = PREDEFINED_RULESETS.get(dropdown_choice, "")
         ruleset.value = new_ruleset # Update state
         print(f"Ruleset state updated by dropdown to: {new_ruleset}")
         return new_ruleset # Update textbox
 
-    def handle_custom_ruleset_input(custom_input):
+    def handle_custom_ruleset_input(custom_input: str) -> None:
         """Updates ruleset state"""
         ruleset.value = custom_input # Update state
         print(f"Ruleset state updated by textbox to: {custom_input}")
 
-    def simulation_loop(current_raw_board, current_ruleset, current_boundary):
+    def simulation_loop(current_raw_board: np.ndarray, current_ruleset: str, current_boundary: str) -> Generator[np.ndarray, None, None]:
         """Generator that runs the simulation loop and yields SCALED frames."""
         print(f"Simulation loop entered with board shape: {current_raw_board.shape}, rule: {current_ruleset}, boundary: {current_boundary}")
 
@@ -134,7 +135,7 @@ with gr.Blocks() as demo:
 
         print("Starting simulation loop...")
         running.value = True
-        current_board_internal = current_raw_board.copy() / 255
+        current_board_internal: np.ndarray = current_raw_board.copy() / 255
 
         while running.value:
             if not current_ruleset:
@@ -144,7 +145,7 @@ with gr.Blocks() as demo:
                 continue
             try:
                 current_board_internal = automata(current_board_internal, rule=current_ruleset, boundary=current_boundary)
-                new_raw_frame = (current_board_internal * 255).astype(np.uint8)
+                new_raw_frame: np.ndarray = (current_board_internal * 255).astype(np.uint8)
                 board_state.value = new_raw_frame
                 yield scale_board(new_raw_frame)
             except Exception as e:
@@ -157,20 +158,20 @@ with gr.Blocks() as demo:
         print("Simulation loop stopped.")
         yield scale_board(board_state.value)
 
-    def handle_pause():
+    def handle_pause() -> None:
         print("Pausing simulation...")
         running.value = False
 
-    def handle_restart(desired_size_tuple):
+    def handle_restart(desired_size_tuple: Tuple[int, int]) -> np.ndarray:
         """Stops simulation, initializes new board of desired size, updates state, returns scaled board."""
         print(f"Restart button clicked. Desired size: {desired_size_tuple}")
         running.value = False
-        new_raw_board = initialize_board(size_tuple=desired_size_tuple)
+        new_raw_board: np.ndarray = initialize_board(size_tuple=desired_size_tuple)
         print(f"handle_restart: New raw board shape: {new_raw_board.shape}")
         board_state.value = new_raw_board
         return scale_board(new_raw_board)
 
-    def handle_size_change(new_size_value):
+    def handle_size_change(new_size_value: Union[int, float, str]) -> None:
         """Updates the desired size state ONLY."""
         print(f"Board size input submitted: {new_size_value}")
         try:
@@ -179,24 +180,24 @@ with gr.Blocks() as demo:
             elif new_size_int > 500: new_size_int = 500
         except (ValueError, TypeError):
              print("Invalid size input, using default.")
-             new_size_int = DEFAULT_BOARD_SIZE
+             new_size_int: int = DEFAULT_BOARD_SIZE
 
-        new_size_tuple = (new_size_int, new_size_int)
+        new_size_tuple: Tuple[int, int] = (new_size_int, new_size_int)
         board_size_state.value = new_size_tuple
         print(f"Desired board size state updated to: {new_size_tuple}")
 
-    def handle_boundary_change(new_boundary):
+    def handle_boundary_change(new_boundary: str) -> None:
         """Updates the boundary condition state."""
         print(f"Boundary condition changed to: {new_boundary}")
         boundary_condition.value = new_boundary
 
     # MODIFIED: Removed current_ruleset from arguments
-    def start_simulation_wrapper(current_raw_board):
+    def start_simulation_wrapper(current_raw_board: Optional[np.ndarray]) -> Generator[np.ndarray, None, None]:
         """Checks board size, initializes if needed, then starts simulation_loop."""
         # MODIFIED: Get desired size, ruleset, and boundary directly from state
-        desired_size_tuple = board_size_state.value
-        current_ruleset = ruleset.value
-        current_boundary = boundary_condition.value
+        desired_size_tuple: Tuple[int, int] = board_size_state.value
+        current_ruleset: str = ruleset.value
+        current_boundary: str = boundary_condition.value
 
         print("-" * 20)
         print(f"Start Wrapper Entered.")
@@ -206,8 +207,8 @@ with gr.Blocks() as demo:
         current_shape = current_raw_board.shape if current_raw_board is not None else None
         print(f"  Current board shape (from board_state input): {current_shape}")
 
-        board_to_start = current_raw_board
-        needs_reinit = False
+        board_to_start: Optional[np.ndarray] = current_raw_board
+        needs_reinit: bool = False
         if current_raw_board is None:
             print("  Current board is None. Needs re-initialization.")
             needs_reinit = True

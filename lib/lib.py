@@ -1,7 +1,7 @@
 from numpy.fft import fft2, ifft2, fftshift
 import numpy as np
 
-def fft_convolve2d(x,y):
+def fft_convolve2d(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     """
     2D convolution, using FFT
     """

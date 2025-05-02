@@ -1,8 +1,9 @@
 import numpy as np
 # Removed: from .lib import fft_convolve2d - No longer using custom FFT convolution
 from scipy.signal import convolve2d # Use SciPy's convolution
+from typing import Tuple, List
 
-def parse_rule(rule):
+def parse_rule(rule: str) -> Tuple[List[int], List[int]]:
     """
     parses B/S rule strings
     """
@@ -11,7 +12,7 @@ def parse_rule(rule):
     return born, survive
 
 # MODIFIED: Added 'boundary' argument
-def automata(state, rule='B3/S23', boundary='wrap'):
+def automata(state: np.ndarray, rule: str = 'B3/S23', boundary: str = 'wrap') -> np.ndarray:
     """
     General cellular automata state transition function.
 
@@ -40,7 +41,7 @@ def automata(state, rule='B3/S23', boundary='wrap'):
     neighbor_sum = convolve2d(state, kernel, mode='same', boundary=boundary, fillvalue=0)
 
     # Apply the rules
-    next_state = np.zeros_like(state)
+    next_state: np.ndarray = np.zeros_like(state)
 
     # Apply survival rules (current cell is alive)
     for s_rule in survive_rules:
