@@ -1,11 +1,14 @@
 ---
-title: Game of Life
-emoji: 🎮
-colorFrom: blue
+title: Game Of Life
+emoji: 📊
+colorFrom: purple
 colorTo: green
 sdk: gradio
+sdk_version: 5.28.0
 app_file: app.py
+pinned: false
 license: apache-2.0
+short_description: Cellular automata experiments using fft
 ---
 
 ![Alt text](http://i.imgur.com/6B84SNI.png "Screenshot")
